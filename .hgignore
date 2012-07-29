@@ -1,0 +1,9 @@
+syntax: glob
+
+build/
+.DS_Store
+*~
+*.mode1v3
+*.perspectivev3
+*.pbxuser
+

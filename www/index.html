@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>File Uploader</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta http-equiv="Content-Language" content="cs">
+	<meta name='HandheldFriendly' content='True' />
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1.0, user-scalable=0">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+	<script type="application/javascript" src="cordova-1.9.0.js"></script>
+	<script type="application/javascript" src="fileuploader.js"></script>
+	
+	<style type="text/css">
+		input { font-size: 2.2em; width: 100%; }
+	</style>
+</head>
+<body>
+	<input type="button" id="btn" value="Vybrat soubor" onclick="chooseFile()">
+    <script type="application/javascript">
+
+function chooseFile () {
+	navigator.camera.getPicture(uploadPhoto, function(message){
+		alert('Getting picture failed');
+	},{
+		quality: 50,
+		destinationType: navigator.camera.DestinationType.FILE_URI,
+		sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY
+	});
+}
+		
+function uploadPhoto(imageURI) {
+	window.plugins.fileUploader.uploadByUri(
+		'http://path.to.your.tld/upload.php',
+		imageURI,
+		{},
+		'file',
+		'anImage.jpg',
+		'image/jpeg', 
+		function(result) {
+			if (result.status == FileUploader.Status.PROGRESS) {
+				var percent = result.progress / result.total * 100;
+				console.log('Uploaded  ' + percent);
+			}
+			else {
+				console.log('Done: ' + result.result);
+				alert('Finished!');
+			}
+		},
+		function(result) {
+			console.log("Error: " + result);
+			alert('Failed: ' + result);
+		}
+
+	);
+}
+       
+    </script>
+</body>
+</html>
